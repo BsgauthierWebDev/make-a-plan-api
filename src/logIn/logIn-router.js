@@ -1,5 +1,5 @@
 const express = require('express');
-const LogInService = require('login-service');
+const LogInService = require('./logIn-service');
 const {requireAuth} = require('../middleware/jwt-auth')
 const logInRouter = express.Router()
 const jsonBodyParser = express.json()
