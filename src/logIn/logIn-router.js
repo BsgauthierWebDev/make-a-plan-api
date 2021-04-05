@@ -5,11 +5,11 @@ const logInRouter = express.Router()
 const jsonBodyParser = express.json()
 
 logInRouter
-    .post('/login', jsonBodyParser, (req, res, next) => {
+    .post('/log-in', jsonBodyParser, (req, res, next) => {
         const {username, password} = req.body
-        const loginUser = {username, password}
+        const logInUser = {username, password}
 
-        for (const [key, value] of Object.entries(loginUser))
+        for (const [key, value] of Object.entries(logInUser))
             if (value == null)
                 return res.status(400).json({
                     error: {message: `Missing '${key}' in request body`}
@@ -17,7 +17,7 @@ logInRouter
 
                 LogInService.getUserWithUsername(
                     req.app.get('db'),
-                    loginUser.username
+                    logInUser.username
                 )
                     .then(dbUser => {
                         if (!dbUser)
@@ -25,7 +25,7 @@ logInRouter
                                 error: {message: `Incorrect username or password`}
                             })
 
-                        return LogInService.comparePasswords(loginUser.password, dbUser.password)
+                        return LogInService.comparePasswords(logInUser.password, dbUser.password)
                             .then(compareMatch => {
                                 if (!compareMatch)
                                     return res.status(400).json({
