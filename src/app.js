@@ -5,6 +5,9 @@ const cors = require('cors')
 // const {CLIENT_ORIGIN} = require('./config');
 const helmet = require('helmet')
 const {NODE_ENV} = require('./config')
+const signUpRouter = require('./signUp/signUp-router')
+const logInRouter = require('./logIn/logIn-router')
+const projectRouter = require('./projects/project-router')
 
 const app = express()
 
@@ -18,6 +21,10 @@ app.use(cors());
 app.get('/', (req, res) => {
     res.send('Hello, world!')
 })
+
+app.use('/api/auth', signUpRouter)
+app.use('/api/auth', logInRouter)
+app.use('/api/projects', projectRouter)
 
 app.use(function errorHandler(error, req, res, next) {
     let response
