@@ -1,5 +1,6 @@
 const path = require('path')
 const express = require('express')
+const {requireAuth} = require('../middleware/jwt-auth')
 const xss = require('xss')
 const ProjectService = require('./project-service')
 
@@ -17,8 +18,9 @@ const serializeProject = project => ({
 
 projectRouter
     .route('/')
+    .all(requireAuth)
     .get((req, res, next) => {
-        ProjectService.getAllProjects(req.app.get('db'), req.body.user_id)
+        ProjectService.getAllProjects(req.app.get('db'), req.user.id)
             .then(projects => {
                 res.json(projects.map(serializeProject))
             })
@@ -64,7 +66,7 @@ projectRouter
 projectRouter
     .route('/:project_id')
     .all((req, res, next) => {
-        ProjectService.getById(req.app.get('db'), req.params.project_id, req.body.user_id)
+        ProjectService.getById(req.app.get('db'), req.params.project_id, req.user.id)
             .then(project => {
                 if (!project) {
                     return res.status(404).json({
@@ -107,7 +109,7 @@ projectRouter
             req.app.get('db'),
             req.params.project_id,
             projectToUpdate,
-            req.body.user_id
+            req.user.id
         )
             .then(() => {
                 res.status(204).end()
@@ -115,7 +117,7 @@ projectRouter
             .catch(next)
     })
     .delete((req, res, next) => {
-        ProjectService.deleteProject(req.app.get('db'), req.params.project_id, req.body.user_id)
+        ProjectService.deleteProject(req.app.get('db'), req.params.project_id, req.user.id)
             .then(() => {
                 res.status(204).end()
             })
