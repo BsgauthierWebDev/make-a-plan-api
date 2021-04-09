@@ -9,7 +9,7 @@ describe(`Sign Up Endpoints`, function() {
     let db
 
     const {testUsers} = helpers.makeProjectFixtures()
-    const testUser = testUSers[0]
+    const testUser = testUsers[0]
 
     before(`make knex instance`, () => {
         db = knex({
