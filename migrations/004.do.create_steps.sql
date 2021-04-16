@@ -21,10 +21,22 @@ VALUES
     ('test456@test.com', 'username456', 'password456'),
     ('test789@test.com', 'username789', 'password789');
 
-INSERT INTO projects (name, description, materials, steps, user_id)
+INSERT INTO projects (name, description, user_id)
 VALUES  
-    ('Test 1', '1st test project', 'Test materials 1', 'Test steps 1', 1),
-    ('Test 2', '2nd test project', 'Test Materials 2', 'Test steps 2', 2),
-    ('Test 3', null, 'Test materials 3', 'Test steps 3', 3);
+    ('Test 1', '1st test project', 1),
+    ('Test 2', '2nd test project', 2),
+    ('Test 3', null, 3);
+
+INSERT INTO materials (item, project_id)
+VALUES
+    ('Test Item 1', 1),
+    ('Test Item 2', 2),
+    ('Test Item 3', 3);
+
+INSERT INTO steps (step, project_id)
+VALUES
+    ('Test Step 1', 1),
+    ('Test Step 2', 2),
+    ('Test Step 3', 3);
 
 COMMIT;
