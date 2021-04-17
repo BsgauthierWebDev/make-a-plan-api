@@ -1,7 +1,6 @@
 const MaterialsService = {
-    getAllMaterials(knex, project_id) {
+    getAllMaterials(knex) {
         return knex.select('*')
-        .where('project_id', project_id)
         .from('materials')
         .orderBy('id')
     },

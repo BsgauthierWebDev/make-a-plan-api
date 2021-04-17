@@ -1,7 +1,6 @@
 const StepsService = {
-    getAllSteps(knex, project_id) {
+    getAllSteps(knex) {
         return knex.select('*')
-            .where('project_id', project_id)
             .from('steps')
             .orderBy('id')
     },
