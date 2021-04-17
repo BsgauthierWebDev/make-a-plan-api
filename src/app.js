@@ -8,6 +8,8 @@ const {NODE_ENV} = require('./config')
 const signUpRouter = require('./signUp/signUp-router')
 const logInRouter = require('./logIn/logIn-router')
 const projectRouter = require('./projects/project-router')
+const materialsRouter = require('./materials/materials-router')
+const stepsRouter = require('./steps/steps-router')
 
 const app = express()
 
@@ -25,6 +27,9 @@ app.get('/', (req, res) => {
 app.use('/api/auth', signUpRouter)
 app.use('/api/auth', logInRouter)
 app.use('/api/projects', projectRouter)
+app.use('/api/materials', materialsRouter)
+app.use('/api/steps', stepsRouter)
+
 
 app.use(function errorHandler(error, req, res, next) {
     let response
