@@ -1,7 +1,7 @@
 process.env.TZ = 'UTC'
 process.env.NODE_ENV = 'test'
 process.env.JWT_SECRET = 'test-jwt-secret'
-process.env.JWT_EXPIRY = '24h'
+process.env.JWT_EXPIRY = '4h'
 require('dotenv').config()
 process.env.TEST_DATABASE_URL = process.env.TEST_DATABASE_URL || 'postgresql://dunder_mifflin@localhost/make-a-plan'
 

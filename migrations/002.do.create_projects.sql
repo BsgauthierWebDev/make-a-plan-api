@@ -4,6 +4,8 @@ CREATE TABLE projects (
     created TIMESTAMPTZ DEFAULT now() NOT NULL,
     modified TIMESTAMPTZ DEFAULT now() NOT NULL,
     description TEXT,
+    materials TEXT,
+    steps TEXT,
     user_id INTEGER
         REFERENCES users(id) ON DELETE CASCADE NOT NULL
 );

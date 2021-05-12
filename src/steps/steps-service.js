@@ -1,8 +1,10 @@
 const StepsService = {
-    getAllSteps(knex) {
-        return knex.select('*')
+    getAllSteps(knex, user_id) {
+        return knex.select('steps.*')
             .from('steps')
-            .orderBy('id')
+            .innerJoin('projects', 'steps.project_id', 'projects.id')
+            .where('projects.user_id', user_id)
+            .orderBy('steps.id')
     },
 
     insertSteps(knex, newSteps) {

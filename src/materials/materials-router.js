@@ -11,14 +11,14 @@ const serializeMaterials = materials => ({
     ...materials,
     item: xss(materials.item),
     completed: xss(materials.completed),
-    project_id: xss(materials.project_id)
+    project_id: xss(materials.project_id),
 })
 
 materialsRouter
     .route('/')
     .all(requireAuth)
     .get((req, res, next) => {
-        MaterialsService.getAllMaterials(req.app.get('db'), req.project_id)
+        MaterialsService.getAllMaterials(req.app.get('db'), req.user.id)
             .then(materials => {
                 res.json(materials.map(serializeMaterials))
             })

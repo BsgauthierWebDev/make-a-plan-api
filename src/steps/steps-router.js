@@ -18,7 +18,7 @@ stepsRouter
     .route('/')
     .all(requireAuth)
     .get((req, res, next) => {
-        StepsService.getAllSteps(req.app.get('db'), req.project_id)
+        StepsService.getAllSteps(req.app.get('db'), req.user.id)
             .then(steps => {
                 res.json(steps.map(serializeSteps))
             })

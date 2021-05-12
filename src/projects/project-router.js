@@ -3,6 +3,8 @@ const express = require('express')
 const {requireAuth} = require('../middleware/jwt-auth')
 const xss = require('xss')
 const ProjectService = require('./project-service')
+const MaterialsService = require('../materials/materials-service')
+const StepsService = require('../steps/steps-service')
 
 const projectRouter = express.Router()
 const jsonParser = express.json()
@@ -13,7 +15,6 @@ const serializeProject = project => ({
     description: xss(project.description),
     materials: xss(project.materials),
     steps: xss(project.steps),
-    user_id: xss(project.user_id)
 })
 
 projectRouter
@@ -22,6 +23,7 @@ projectRouter
     .get((req, res, next) => {
         ProjectService.getAllProjects(req.app.get('db'), req.user.id)
             .then(projects => {
+                console.log(projects)
                 res.json(projects.map(serializeProject))
             })
             .catch(next)
@@ -32,7 +34,6 @@ projectRouter
             description,
             materials,
             steps,
-            user_id
         } = req.body
 
         const newProject = {
@@ -40,8 +41,9 @@ projectRouter
             description,
             materials,
             steps,
-            user_id
         }
+
+        newProject.user_id = req.user.id
 
         //check for missing fields
         for (const [key, value] of Object.entries(newProject)) {
@@ -55,16 +57,35 @@ projectRouter
             newProject.description = null
         }
         ProjectService.insertProject(req.app.get('db'), newProject)
-            .then(project => {
-                res.status(201)
+            //.then(function(project) { ......; return project }).then
+            .then(function(project) {
+                // res
+                return project;
+                })
+            .then(function(project) {//build out new materials to add
+                MaterialsService.insertMaterials(req.app.get('db'), project.materials)
+                .then(function(notProject) {
+                    // res
+                    //     .location(path.posix.join(req.originalUrl, `${materials.id}`))
+                    //     .json(serializeMaterials(materials))
+                return newProject;
+            })
+            })
+            .then(function(project) {//build out new steps to add
+                console.log(project);
+                StepsService.insertSteps(req.app.get('db'), newProject.steps)
+                .then(function(project) {
+                    res.status(201)
                     .location(path.posix.join(req.originalUrl, `${project.id}`))
                     .json(serializeProject(project))
+                })
             })
             .catch(next)
     })
 
 projectRouter
     .route('/:project_id')
+    .all(requireAuth)
     .all((req, res, next) => {
         ProjectService.getById(req.app.get('db'), req.params.project_id, req.user.id)
             .then(project => {
@@ -87,20 +108,18 @@ projectRouter
             description,
             materials,
             steps,
-            user_id
         } = req.body
         const projectToUpdate = {
             name, 
             description,
             materials,
             steps,
-            user_id
         }
 
-        if (!name && !materials && !steps && !user_id) {
+        if (!name && !materials && !steps) {
             return res.status(400).json({
                 error: {
-                    message: `Request body must contain 'name', 'materials', 'steps' or 'user_id' field`
+                    message: `Request body must contain 'name', 'materials', or 'steps' field`
                 }
             })
         }
@@ -117,6 +136,7 @@ projectRouter
             .catch(next)
     })
     .delete((req, res, next) => {
+        console.log(req.user)
         ProjectService.deleteProject(req.app.get('db'), req.params.project_id, req.user.id)
             .then(() => {
                 res.status(204).end()

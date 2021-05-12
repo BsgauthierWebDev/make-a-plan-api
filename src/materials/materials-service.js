@@ -1,8 +1,10 @@
 const MaterialsService = {
-    getAllMaterials(knex) {
-        return knex.select('*')
+    getAllMaterials(knex, user_id) {
+        return knex.select('materials.*')
         .from('materials')
-        .orderBy('id')
+        .innerJoin('projects', 'materials.project_id', 'projects.id')
+        .where('projects.user_id', user_id)
+        .orderBy('materials.id')
     },
 
     insertMaterials(knex, newMaterials) {

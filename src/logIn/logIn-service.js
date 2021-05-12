@@ -9,8 +9,9 @@ const LogInService = {
             .first()
     },
     comparePasswords(password, hash) {
-        // return bcrypt.compare(password, hash)
-        return password === hash
+        let ret =  bcrypt.compare(password, hash)
+        return ret ? ret : password === hash
+        // return password === hash
     },
     createJwt(subject, payload) {
         return jwt.sign(payload, config.JWT_SECRET, {
@@ -21,7 +22,7 @@ const LogInService = {
     },
     verifyJwt(token) {
         return jwt.verify(token, config.JWT_SECRET, {
-            aogorithms: ['HS256'],
+            algorithms: ['HS256'],
         })
     },
     parseBasicToken(token) {
