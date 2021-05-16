@@ -39,27 +39,6 @@ logInRouter
                                 return res.send({
                                     authToken: LogInService.createJwt(sub, payload),
                                 })
-
-                        // return LogInService.comparePasswords(logInUser.password, dbUser.password)
-                            // Bring this back later
-                            /*.then(compareMatch => {
-                                if (!compareMatch)
-                                    SignUpService.hashPassword(logInUser.password)
-                                        .then((password) => {
-                                            console.log(password)
-                                        })
-                                    return res.status(400).json({
-                                        error: {message: `Incorrect username or password'}` + ' ' +
-                                        logInUser.password + ' ' + 
-                                        SignUpService.hashPassword(logInUser.password)}
-                                    })
-
-                                const sub = dbUser.username
-                                const payload = {user_id: dbUser.id}
-                                res.send({
-                                    authToken: LogInService.createJwt(sub, payload),
-                                })
-                            })*/
                     })
                     .catch(next)
     })

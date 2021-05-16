@@ -11,7 +11,6 @@ const LogInService = {
     comparePasswords(password, hash) {
         let ret =  bcrypt.compare(password, hash)
         return ret ? ret : password === hash
-        // return password === hash
     },
     createJwt(subject, payload) {
         return jwt.sign(payload, config.JWT_SECRET, {

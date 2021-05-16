@@ -36,11 +36,11 @@ projectRouter
             steps,
         } = req.body
 
+        console.log(materials)
+
         const newProject = {
             name,
             description,
-            materials,
-            steps,
         }
 
         newProject.user_id = req.user.id
@@ -57,28 +57,33 @@ projectRouter
             newProject.description = null
         }
         ProjectService.insertProject(req.app.get('db'), newProject)
-            //.then(function(project) { ......; return project }).then
             .then(function(project) {
-                // res
                 return project;
                 })
             .then(function(project) {//build out new materials to add
-                MaterialsService.insertMaterials(req.app.get('db'), project.materials)
-                .then(function(notProject) {
-                    // res
-                    //     .location(path.posix.join(req.originalUrl, `${materials.id}`))
-                    //     .json(serializeMaterials(materials))
-                return newProject;
-            })
+                console.log(materials)
+                console.log(steps)
+                for (let i = 0; i < materials.length; i++) {
+                    let newItem = {
+                        item: materials[i],
+                        project_id: project.id
+                    }
+                    MaterialsService.insertMaterials(req.app.get('db'), newItem)
+                }
+                for (let i = 0; i < steps.length; i++) {
+                    let newStep = {
+                        step: steps[i],
+                        project_id: project.id
+                    }
+                    StepsService.insertSteps(req.app.get('db'), newStep)
+                }
+                return project;
             })
             .then(function(project) {//build out new steps to add
                 console.log(project);
-                StepsService.insertSteps(req.app.get('db'), newProject.steps)
-                .then(function(project) {
                     res.status(201)
                     .location(path.posix.join(req.originalUrl, `${project.id}`))
                     .json(serializeProject(project))
-                })
             })
             .catch(next)
     })
