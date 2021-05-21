@@ -96,6 +96,16 @@ materialsRouter
             materialsToUpdate,
             req.project.id
         )
+            .then(function(project) {
+                console.log(materials);
+                for (let i = 0; i < materials.length; i++) {
+                    let updatedItem = {
+                        item: materials[i],
+                        project_id: project.id
+                    }
+                    MaterialsService.updateMaterials(req.app.get('db'), updatedItem)
+                }
+            })
             .then(() => {
                 res.status(204).end()
             })
