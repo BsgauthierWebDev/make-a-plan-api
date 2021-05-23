@@ -55,36 +55,22 @@ materialsRouter
     })
 
 materialsRouter
-    .route(':/materials_id')
-    .all((req, res, next) => {
-        MaterialsService.getById(req.app.get('db'), req.params.materials_id, req,project.id)
-            .then(materials => {
-                if (!materials) {
-                    return res.status(400).json({
-                        error: {message: `Materials do not exist`}
-                    })
-                }
-                res.materials = materials
-                next()
-            })
-            .catch(next)
-    })
+    .route('/:materials_id')
+    .all(requireAuth)
     .get((req, res, next) => {
         res.json(serializeMaterials(materials))
     })
     .patch(jsonParser, (req, res, next) => {
         const {
-            item,
+            id,
             completed,
-            project_id
         } = req.body
         const materialsToUpdate = {
-            item,
+            id,
             completed,
-            project_id
         }
 
-        if (!item && !completed && !project_id) {
+        if (!id && !completed) {
             return res.status(400).json({
                 error: {message: `Request body must contain 'item', 'completed' and 'project_id`}
             })
@@ -92,22 +78,12 @@ materialsRouter
 
         MaterialsService.updateMaterials(
             req.app.get('db'),
-            req.params.materials_id,
+            id,
             materialsToUpdate,
-            req.project.id
         )
-            .then(function(project) {
-                console.log(materials);
-                for (let i = 0; i < materials.length; i++) {
-                    let updatedItem = {
-                        item: materials[i],
-                        project_id: project.id
-                    }
-                    MaterialsService.updateMaterials(req.app.get('db'), updatedItem)
-                }
-            })
-            .then(() => {
+            .then((materials) => {
                 res.status(204).end()
+                .json(serializeMaterials(materials))
             })
             .catch(next)
     })

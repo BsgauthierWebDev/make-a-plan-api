@@ -56,6 +56,7 @@ stepsRouter
 
 stepsRouter
     .route('/:steps_id')
+    .all(requireAuth)
     .all((req, res, next) => {
         StepsService.getById(req.app.get('db'), req.params.steps_id, req.project.id)
             .then(steps => {

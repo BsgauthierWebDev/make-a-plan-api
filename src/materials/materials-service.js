@@ -31,10 +31,10 @@ const MaterialsService = {
             .delete()
     },
 
-    updateMaterials(knex, id, newMaterialFields, project_id) {
+    updateMaterials(knex, id, newMaterialFields) {
+        console.log(id);
         return knex('materials')
-            .where({id})
-            .where('project_id', project_id)
+            .where('id', id)
             .update(newMaterialFields)
     }
 }
