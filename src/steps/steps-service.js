@@ -31,11 +31,11 @@ const StepsService = {
             .delete()
     },
 
-    updateSteps(knex, id, newStepsFields, project_id) {
+    updateSteps(knex, id, newStepFields) {
+        console.log(id)
         return knex('steps')
-            .where({id})
-            .where('project_id', project_id)
-            .update(newStepsFields)
+            .where('id', id)
+            .update(newStepFields)
     }
 }
 

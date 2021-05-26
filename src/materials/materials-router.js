@@ -81,9 +81,9 @@ materialsRouter
             id,
             materialsToUpdate,
         )
-            .then((materials) => {
-                res.status(204).end()
-                .json(serializeMaterials(materials))
+            .then(() => {
+                res.status(200)
+                .json(materialsToUpdate)
             })
             .catch(next)
     })

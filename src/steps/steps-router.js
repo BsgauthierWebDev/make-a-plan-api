@@ -57,35 +57,20 @@ stepsRouter
 stepsRouter
     .route('/:steps_id')
     .all(requireAuth)
-    .all((req, res, next) => {
-        StepsService.getById(req.app.get('db'), req.params.steps_id, req.project.id)
-            .then(steps => {
-                if (!steps) {
-                    return res.status(400).json({
-                        error: {message: `Steps do not exist`}
-                    })
-                }
-                res.steps = steps
-                next()
-            })
-            .catch(next)
-    })
     .get((req, res, next) => {
         res.json(serializeSteps(steps))
     })
     .patch(jsonParser, (req, res, next) => {
         const {
-            step,
-            completed,
-            project_id
+            id,
+            completed
         } = req.body
         const stepsToUpdate = {
-            step,
-            completed,
-            project_id
+            id,
+            completed
         }
 
-        if (!step && !completed && !project_id) {
+        if (!id && !completed) {
             return res.status(400).json({
                 error: {message: `Request must contain 'step', 'completed' and 'project_id'`}
             })
@@ -93,12 +78,12 @@ stepsRouter
 
         StepsService.updateSteps(
             req.app.get('db'),
-            req.params.steps_id,
+            id,
             stepsToUpdate,
-            req.project.id
         )
             .then(() => {
-                res.status(204).end()
+                res.status(200)
+                .json(stepsToUpdate)
             })
             .catch(next)
     })
