@@ -32,7 +32,6 @@ const StepsService = {
     },
 
     updateSteps(knex, id, newStepFields) {
-        console.log(id)
         return knex('steps')
             .where('id', id)
             .update(newStepFields)

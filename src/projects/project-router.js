@@ -23,7 +23,6 @@ projectRouter
     .get((req, res, next) => {
         ProjectService.getAllProjects(req.app.get('db'), req.user.id)
             .then(projects => {
-                console.log(projects)
                 res.json(projects.map(serializeProject))
             })
             .catch(next)
@@ -35,8 +34,6 @@ projectRouter
             materials,
             steps,
         } = req.body
-
-        console.log(materials)
 
         const newProject = {
             name,
@@ -61,8 +58,6 @@ projectRouter
                 return project;
                 })
             .then(function(project) {//build out new materials to add
-                console.log(materials)
-                console.log(steps)
                 for (let i = 0; i < materials.length; i++) {
                     let newItem = {
                         item: materials[i],
@@ -80,7 +75,6 @@ projectRouter
                 return project;
             })
             .then(function(project) {//build out new steps to add
-                console.log(project);
                     res.status(201)
                     .location(path.posix.join(req.originalUrl, `${project.id}`))
                     .json(serializeProject(project))
@@ -141,7 +135,6 @@ projectRouter
             .catch(next)
     })
     .delete((req, res, next) => {
-        console.log(req.user)
         ProjectService.deleteProject(req.app.get('db'), req.params.project_id, req.user.id)
             .then(() => {
                 res.status(204).end()

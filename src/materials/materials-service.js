@@ -32,7 +32,6 @@ const MaterialsService = {
     },
 
     updateMaterials(knex, id, newMaterialFields) {
-        console.log(id);
         return knex('materials')
             .where('id', id)
             .update(newMaterialFields)
