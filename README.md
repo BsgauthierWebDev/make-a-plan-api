@@ -1,26 +1,124 @@
-# Express Boilerplate!
+## Make A Plan API
 
-This is a boilerplate project used for starting new projects!
+# Make A Plan
+https://make-a-plan-bsgauthierwebdev.vercel.app/
 
-## Set up
+<hr>
+make-a-plan-api
+<hr />
+This API allows the Make A Plan user to interact with their acccount.
 
-Complete the following steps to start a new project (NEW-PROJECT-NAME):
+## Endpoints
+### Users Endpoints
+#### POST/api/sign-up
+Name       | Type       | In        | Description
+-----------|------------|-----------|------------
+email | string | body | REQUIRED
+username | string | body | REQUIRED
+password | string | body | REQUIRED
+<li>authToken: ********</li>
+<li>Status: 400 'Incorrect username or password'</li>
+<li>Status: 400 `Missing '${key}' in request body</li>
 
-1. Clone this repository to your local machine `git clone BOILERPLATE-URL NEW-PROJECTS-NAME`
-2. `cd` into the cloned repository
-3. Make a fresh start of the git history for this project with `rm -rf .git && git init`
-4. Install the node dependencies `npm install`
-5. Move the example Environment file to `.env` that will be ignored by git and read by the express server `mv example.env .env`
-6. Edit the contents of the `package.json` to use NEW-PROJECT-NAME instead of `"name": "express-boilerplate",`
+#### POST/api/log-in
+Name       | Type       | In        | Description
+-----------|------------|-----------|------------
+username | string | body | REQUIRED
+password | string | body | REQUIRED
+<li>Status: 201 ('authToken': 'eyJhbGciOsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjox20ifQ.U-KjAKzBySAnFeshBQoOPK2ErLdgBI')</li>
+<li>Status: 400 'Username already taken'</li>
+<li>Status: 400 `Missing '${key}' in request body`</li>
 
-## Scripts
+## All Endpoints below require Auth
+<hr />
 
-Start the application `npm start`
+#### GET/api/user/projects
+Name           | Type           | In            | Description
+---------------|----------------|---------------|----------------
+bearer token | JWT | Authorization | REQUIRED
+<li>Status: 401 'Unauthorized'</li>
+<li>Status: 201 JSON data [{'id': 1, 'name': 'Test', 'date_modified': '5/31/2021', 'description': 'Test', 'materials': 'Test Mat 1, Test Mat 2, Test Mat 3', 'steps': 'Test Steps 1, Test Steps 2, Test Steps 3'}]</li>
+<hr />
 
-Start nodemon for the application `npm run dev`
+#### POST/api/user/projects
+Name           | Type           | In            | Description
+---------------|----------------|---------------|----------------
+bearer token | JWT | Authorization | REQUIRED
+name | string | body | REQUIRED
+description | string | body | 
+materials | string | body | REQUIRED
+steps | string | body | REQUIRED
+<li>Status: 401 'Unauthorized'</li>
+<li> Statis: 400 `Missing '${key}' in request body`
+<li>Status: 201 JSON data [{'id': 2, 'name': 'Test 2', 'date_modified': '5/31/2021', 'description': 'Another Test', 'materials': 'Test Mat 1, Test Mat 2, Test Mat 3', 'steps': 'Test Steps 1, Test Steps 2, Test Steps 3'}]</li>
+<hr />
 
-Run the tests `npm test`
+#### GET/api/user/projects/{project_id}
+Name           | Type           | In            | Description
+---------------|----------------|---------------|----------------
+bearer token | JWT | Authorization | REQUIRED
+project_id | number | path | REQUIRED
+<li>Status: 401 'Unauthorized'</li>
+<li>Status: 201 JSON data [{'id': 1, 'name': 'Test', 'date_modified': '5/31/2021', 'description': 'Test', 'materials': 'Test Mat 1, Test Mat 2, Test Mat 3', 'steps': 'Test Steps 1, Test Steps 2, Test Steps 3'}]</li>
+<hr />
 
-## Deploying
+#### PATCH/api/user/projects/{project_id}
+Name           | Type           | In            | Description
+---------------|----------------|---------------|----------------
+bearer token | JWT | Authorization | REQUIRED
+project_id | number | path | REQUIRED
+materials | string | body | REQUIRED
+steps | string | body | REQUIRED
+<li>Status: 401 'Unauthorized'</li>
+<li>Status: 201 JSON data [{'id': 1, 'name': 'Test', 'date_modified': '5/31/2021', 'description': 'Test', 'materials': 'Test Mat 1, Test Mat 2, Test Mat 3', 'steps': 'Test Steps 1, Test Steps 2, Test Steps 3'}]</li>
+<hr />
 
-When your new project is ready for deployment, add a new Heroku application with `heroku create`. This will make a new git remote called "heroku" and you can then `npm run deploy` which will push to this remote's main branch.
+# How to Use Make A Plan
+
+<img src = 'https://github.com/BsgauthierWebDev/make-a-plan/blob/master/images/landing-page.JPG'>
+
+Make A Plan is a site where users can keep track of projects throughout all stages; from the gathering of materials to the completion of all necessary steps.
+<br />
+<img src = 'https://github.com/BsgauthierWebDev/make-a-plan/blob/master/images/demo.JPG'>
+<br />
+
+New users can sign up for an account:
+<br />
+<img src = 'https://github.com/BsgauthierWebDev/make-a-plan/blob/master/images/demo.JPG'>
+<br />
+
+Once signed up, users can log into their account:
+<br />
+<img src = 'https://github.com/BsgauthierWebDev/make-a-plan/blob/master/images/demo.JPG'>
+<br />
+
+Make A Plan keeps track of all projects in their account, active and completed:
+<br />
+<img src = 'https://github.com/BsgauthierWebDev/make-a-plan/blob/master/images/user-home.JPG'>
+<br />
+
+And users can keep track of their progress throughout the life of the project:
+<br />
+<img src = 'https://github.com/BsgauthierWebDev/make-a-plan/blob/master/images/user-home.JPG'>
+<br />
+
+Make A Plan is mobile-friendly as well!
+<br />
+<img src = 'https://github.com/BsgauthierWebDev/make-a-plan/blob/master/images/user-home.JPG'>
+<img src = 'https://github.com/BsgauthierWebDev/make-a-plan/blob/master/images/mobile-user-project.JPG'>
+<hr />
+
+# Technology Used
+* JavaScript
+* React
+* JSX
+* CSS
+* HTML
+* AJAX
+* JWT
+* SQL
+* postgresql
+* Node
+* Express
+* Heroku
+* Vercel
